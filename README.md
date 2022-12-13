@@ -8,8 +8,8 @@ Possui as seguintes operações:
 * Multiplicação (*)
 * Divsão (/)
 * Porcentagem (%)
-* Potência base 10 (10^x)
-* Raiz quadrada &radic;
-* x quadrado (x^2)
+* Potência base 10 (10<sup>x</sup>)
+* Raiz quadrada &radic;x
+* x quadrado (x&sup2;)
 * Valor inverso (1/x)
 * Sinal (-)
