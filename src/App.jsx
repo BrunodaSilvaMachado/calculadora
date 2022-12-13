@@ -105,8 +105,8 @@ const App = () => {
         <Input value={currentNumber} />
         <Row>
           <Button label="%" onClick={()=>handleTernaryOperator(new Percentation())} />
-          <Button label="&larr;" onClick={handleRemoveNumber} />
           <Button label={<>10<sup>x</sup></>} onClick={() => handleUnitaryOperator(new Base10())} />
+          <Button label="&larr;" onClick={handleRemoveNumber} />
           <Button label="C" onClick={handleClearAll} />
         </Row>
         <Row>
