@@ -1,4 +1,4 @@
-# calculadora :notebook_with_decorative_cover:
+# calculadora :heavy_division_sign:
 
 Um app calculadora padrão desenvolvido usando _react_ e _styled-components_.
 Possui as seguintes operações:
