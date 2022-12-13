@@ -11,9 +11,10 @@ export const Container = styled.div`
 `
 
 export const Content = styled.div`
-    background-color: #FFFFFF;
+    background-color: #FAFAFA;
     width:50%;
-    
+    border-radius: 1rem;
+    padding: 12px 18px;
 `
 
 export const Row = styled.div`
