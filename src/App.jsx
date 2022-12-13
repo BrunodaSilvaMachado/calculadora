@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Container, Content, Row } from "./styles";
 import Input from "./components/Input";
 import Button from "./components/Button";
-import { Addiction, Subtration, Multiplication, Division, Percentation } from "./operators";
-
-const calcPercentage = new Percentation(); //Todo: padronizar interface
+import { Addiction, Subtration, Multiplication, Division, Percentation, IOperator, ITernaryOperator, Base10, Inverse, Square, Sqrt, Signal} from "./operators";
 
 const App = () => {
   const [currentNumber, setCurrentNumber] = useState("0");
@@ -12,7 +10,17 @@ const App = () => {
   const [operation, setOperation] = useState(null);
   const [solved, isSolve] = useState(false); //Todo: fazer melhor
 
-  const solve = (op) => {return op.operation(Number(lastNumber), Number(currentNumber))};
+  const solve = (op, other_op) => {
+    const a = Number(lastNumber);
+    const b = Number(currentNumber);
+    if (op instanceof IOperator)
+      return op.operation(a, b);
+    else if(op instanceof ITernaryOperator){
+      return op.operation(a, b, other_op);
+    }else {
+      return op.operation(b);
+    }
+  };
 
   const handleClearAll = () => {
     setCurrentNumber("0");
@@ -32,15 +40,9 @@ const App = () => {
     });
   };
 
-  const handlePlusmnNumber = () => {
-    setCurrentNumber((prev) =>
-      prev === "0" ? "0" : prev.startsWith("-") ? prev.substring(1) : `-${prev}`
-    );
-  };
-
   const handleAddNumber = (number) => {
     setCurrentNumber((prev) =>{
-      const r = prev.startsWith("0") ? `${number}` : `${prev}${number}`;
+      const r = (prev === "0") ? `${number}` : `${prev}${number}`;
       if (lastNumber !== "" && operation !== null || solved){
         isSolve(false);
         return `${number}`;
@@ -53,8 +55,17 @@ const App = () => {
 
   const handleDecimal = () => {
     setCurrentNumber((prev) =>
-      prev.includes(".")? `${prev}.` : `${prev}`
+      prev.includes(".")? `${prev}` : `${prev}.`
     );
+  };
+
+  const handleEqual = () => {
+    if (!lastNumber !== "" && operation !== null && currentNumber !== "0") {
+      setCurrentNumber(String(solve(operation)));
+      setOperation(null);
+      setLastNumber("");
+      isSolve(true);
+    }
   };
 
   const handleOperators = (funOp) => {
@@ -70,22 +81,9 @@ const App = () => {
     } 
   };
 
-  const handleEqual = () => {
+  const handleTernaryOperator = (funOp) => {
     if (!lastNumber !== "" && operation !== null && currentNumber !== "0") {
-      setCurrentNumber(String(solve(operation)));
-      setOperation(null);
-      setLastNumber("");
-      isSolve(true);
-    }
-  };
-
-  const handlePercentage = () => {
-    if (!lastNumber !== "" && operation !== null && currentNumber !== "0") {
-      const result = calcPercentage.operation(
-        Number(lastNumber),
-        Number(currentNumber),
-        operation
-      );
+      const result = solve(funOp, operation)
       setCurrentNumber(String(result));
       setOperation(null);
       isSolve(true);
@@ -95,14 +93,26 @@ const App = () => {
     }
   };
 
+  const handleUnitaryOperator = (funOp)=>{
+    setCurrentNumber(String(solve(funOp)));
+    setOperation(null);
+    isSolve(true);
+  }
+
   return (
     <Container>
       <Content>
         <Input value={currentNumber} />
         <Row>
-          <Button label="%" onClick={handlePercentage} />
+          <Button label="%" onClick={()=>handleTernaryOperator(new Percentation())} />
           <Button label="&larr;" onClick={handleRemoveNumber} />
+          <Button label={<>10<sup>x</sup></>} onClick={() => handleUnitaryOperator(new Base10())} />
           <Button label="C" onClick={handleClearAll} />
+        </Row>
+        <Row>
+          <Button label="1/x" onClick={() => handleUnitaryOperator(new Inverse())} />
+          <Button label="x&sup2;" onClick={() => handleUnitaryOperator(new Square())} />
+          <Button label="&radic;" onClick={() => handleUnitaryOperator(new Sqrt())} />
           <Button
             label="&divide;"
             onClick={() => handleOperators(new Division())}
@@ -130,7 +140,7 @@ const App = () => {
           <Button label="+" onClick={() => handleOperators(new Addiction())} />
         </Row>
         <Row>
-          <Button label="&plusmn;" onClick={handlePlusmnNumber} />
+          <Button label="&plusmn;" onClick={()=>handleUnitaryOperator(new Signal())} />
           <Button label="0" onClick={() => handleAddNumber("0")} />
           <Button label="," onClick={handleDecimal} />
           <Button label="=" onClick={handleEqual} />
