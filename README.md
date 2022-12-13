@@ -12,3 +12,4 @@ Possui as seguintes operações:
 * Raiz quadrada &radic;
 * x quadrado (x^2)
 * Valor inverso (1/x)
+* Sinal (-)
